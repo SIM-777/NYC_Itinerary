@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New York City Itinerary Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #FAFAF7;
+    --cream-mid: #F5F2EB;
+    --cream-card: #FBF8F3;
+    --white: #ffffff;
+    --border: #E8E4DA;
+    --border-light: #F0EDE4;
+    --ink: #1A1A18;
+    --ink-mid: #3A3A36;
+    --ink-muted: #5A5A56;
+    --ink-faint: #888880;
+    --accent: #D4502A;
+    --accent-light: #FFF0EB;
+    --accent-green-bg: #E8F4ED;
+    --accent-green-text: #1A6B42;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nunito Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--white);
+    border-bottom: 2px solid var(--border);
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    background: var(--accent-green-bg);
+    color: var(--accent-green-text);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 5px 16px;
+    border-radius: 20px;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.2rem);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.12;
+    margin-bottom: .75rem;
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+    max-width: 500px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+    padding: .85rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    letter-spacing: .02em;
+  }
+
+  /* ── STICKY NAV ── */
+  .sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #1A1A18;
+    border-bottom: 3px solid var(--accent);
+    display: flex;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: .7rem .5rem;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 900;
+    color: #B4B2A9;
+    background: #2C2C2A;
+    border: 1.5px solid #3A3A36;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: .04em;
+    transition: color .15s, background .15s, border-color .15s, transform .1s;
+    line-height: 1.3;
+  }
+
+  .tab-btn .tab-label { display: block; font-size: 14px; }
+  .tab-btn .tab-sub { display: block; font-size: 10px; font-weight: 700; letter-spacing: .08em; opacity: .6; margin-top: 2px; }
+
+  .tab-btn:hover {
+    color: #fff;
+    background: #3A3A36;
+    border-color: #888880;
+  }
+
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .tab-btn.active .tab-sub { opacity: .85; }
+
+  /* ── SECTIONS ── */
+  .section { display: none; padding: 0 0 2rem; }
+  .section.visible { display: block; }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 2rem 1.5rem .6rem;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    margin: 0 1.5rem 1.5rem;
+    overflow: hidden;
+  }
+
+  .card-head {
+    background: var(--cream-card);
+    padding: 1rem 1.5rem;
+    border-bottom: 1.5px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .card-badge {
+    font-size: 11px;
+    font-weight: 900;
+    background: var(--ink);
+    color: #fff;
+    padding: 3px 12px;
+    border-radius: 20px;
+    letter-spacing: .04em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ── TABLE ── */
+  .itinerary-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .itinerary-table thead tr {
+    background: var(--cream-mid);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .itinerary-table thead th {
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding: .5rem .9rem;
+    text-align: left;
+  }
+
+  .itinerary-table thead th:first-child {
+    width: 60px;
+    text-align: center;
+  }
+
+  .itinerary-table tbody tr {
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .itinerary-table tbody tr:last-child { border-bottom: none; }
+
+  .itinerary-table tbody tr:nth-child(even) { background: #FDFCFA; }
+
+  .day-label {
+    font-size: 11px;
+    font-weight: 900;
+    color: var(--accent);
+    background: var(--cream-card);
+    border-right: 1px solid var(--border);
+    text-align: center;
+    padding: .75rem .5rem;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .itinerary-table tbody td {
+    padding: .7rem .9rem;
+    font-size: 13px;
+    color: var(--ink-mid);
+    line-height: 1.5;
+    vertical-align: top;
+  }
+
+  /* ── PER-CARD CTA ── */
+  .card-cta {
+    padding: 1rem 1.25rem;
+    border-top: 2px solid var(--border);
+    background: var(--cream-card);
+  }
+
+  .card-cta-btn {
+    display: block;
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: .85rem 1.25rem;
+    font-size: 14px;
+    font-weight: 900;
+    font-family: 'Nunito Sans', sans-serif;
+    cursor: pointer;
+    text-align: center;
+    letter-spacing: .02em;
+    text-decoration: none;
+  }
+
+  .card-cta-btn:hover { background: #BC4424; }
+
+  /* ── BOTTOM CTA SECTION ── */
+  .cta-section {
+    background: var(--accent-light);
+    border-top: 3px solid var(--accent);
+    padding: 4rem 2rem;
+    margin-top: 1rem;
+  }
+
+  .cta-kicker {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: .75rem;
+  }
+
+  .cta-head {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: .75rem;
+    max-width: 680px;
+  }
+
+  .cta-body {
+    font-size: .975rem;
+    color: var(--ink-muted);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+    max-width: 640px;
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+    margin-bottom: 2.5rem;
+  }
+
+  .feat {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.25rem 1rem;
+  }
+
+  .feat-title {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--ink);
+    margin-bottom: .3rem;
+  }
+
+  .feat-body {
+    font-size: 13px;
+    color: var(--ink-muted);
+    line-height: 1.55;
+  }
+
+  .feat-check {
+    font-size: 18px;
+    color: var(--accent);
+    margin-bottom: .5rem;
+    font-weight: 900;
+  }
+
+  /* personalised recs list */
+  .recs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+    margin: .5rem 0 0;
+  }
+
+  .rec-tag {
+    background: var(--accent-green-bg);
+    color: var(--accent-green-text);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-align: center;
+  }
+
+  /* ── PRICE BLOCK ── */
+  .price-block {
+    background: var(--ink);
+    border-radius: 14px;
+    padding: 2rem 2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  .price-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .price-text {
+    font-size: 14px;
+    color: #B4B2A9;
+    line-height: 1.65;
+  }
+
+  .price-text strong {
+    display: block;
+    font-size: 16px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .why-section {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .why-title {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--ink);
+    margin-bottom: .75rem;
+  }
+
+  .why-body {
+    font-size: 13.5px;
+    color: var(--ink-muted);
+    line-height: 1.7;
+  }
+
+  .reviews-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 2.5rem 0 1.25rem;
+  }
+
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+    margin-bottom: 2.5rem;
+  }
+
+  .review-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.25rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+  }
+
+  .review-stars {
+    color: #E8A020;
+    font-size: 15px;
+    letter-spacing: 2px;
+  }
+
+  .review-text {
+    font-size: 13.5px;
+    color: var(--ink-mid);
+    line-height: 1.7;
+    flex: 1;
+  }
+
+  .review-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-top: 1px solid var(--border-light);
+    padding-top: .75rem;
+  }
+
+  .review-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .review-name {
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--ink);
+  }
+
+  .review-meta {
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin-top: 1px;
+    line-height: 1.5;
+  }
+
+
+    display: block;
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 1.2rem;
+    font-size: 18px;
+    font-weight: 900;
+    font-family: 'Nunito Sans', sans-serif;
+    cursor: pointer;
+    text-align: center;
+    letter-spacing: .03em;
+    text-decoration: none;
+    max-width: 560px;
+  }
+
+  .main-cta:hover { background: #BC4424; }
+
+  .sub-note {
+    font-size: 12px;
+    color: var(--ink-faint);
+    margin-top: .75rem;
+    text-align: center;
+    max-width: 560px;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 12px;
+    color: var(--ink-faint);
+    border-top: 1px solid var(--border);
+    background: var(--white);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .hero { padding: 3rem 1.25rem 2rem; }
+    .card { margin: 0 .75rem 1.25rem; }
+    .section-label { padding: 1.5rem 1rem .5rem; }
+    .card-head { padding: .85rem 1rem; }
+    .card-cta { padding: .85rem 1rem; }
+    .cta-section { padding: 3rem 1.25rem; }
+    .price-block { padding: 1.5rem; gap: 1rem; }
+    .price-num { font-size: 3rem; }
+    .itinerary-table thead th,
+    .itinerary-table tbody td { padding: .6rem .6rem; font-size: 12px; }
+    .day-label { font-size: 10px; padding: .6rem .3rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">NYC Itinerary Collection</div>
+  <h1 class="hero-title">New York City,<br>Day by Day</h1>
+  <p class="hero-sub">Real itineraries from travelers and bloggers — browse by trip length, then get your own built from scratch, tailored to you.</p>
+  <a href="#cta" class="hero-cta">Get My Custom NYC Itinerary →</a>
+</div>
+
+<!-- STICKY TABS -->
+<nav class="sticky-nav" role="tablist" aria-label="Itinerary length">
+  <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="sec-3" onclick="switchTab(this,'sec-3')"><span class="tab-label">3 Days</span><span class="tab-sub">3 itineraries</span></button>
+  <button class="tab-btn" role="tab" aria-selected="false" aria-controls="sec-5" onclick="switchTab(this,'sec-5')"><span class="tab-label">5 Days</span><span class="tab-sub">3 itineraries</span></button>
+  <button class="tab-btn" role="tab" aria-selected="false" aria-controls="sec-7" onclick="switchTab(this,'sec-7')"><span class="tab-label">7 Days</span><span class="tab-sub">3 itineraries</span></button>
+</nav>
+
+<!-- ══ 3-DAY SECTION ══ -->
+<div class="section visible" id="sec-3" role="tabpanel">
+
+  <p class="section-label">3-Day Itineraries</p>
+
+  <!-- 3-Day #1 -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-name">The Classic Manhattan Loop</span>
+      <span class="card-badge">3 Days</span>
+    </div>
+    <table class="itinerary-table">
+      <thead><tr><th></th><th>Morning</th><th>Afternoon</th><th>Evening</th></tr></thead>
+      <tbody>
+        <tr><td class="day-label">Day 1</td><td>Explore Financial District · 9/11 Memorial · Wall Street</td><td>Ghostbusters Firehouse · Staten Island Ferry (Statue of Liberty views)</td><td>Chinatown · Little Italy · SoHo · Greenwich Village</td></tr>
+        <tr><td class="day-label">Day 2</td><td>Intrepid Sea, Air &amp; Space Museum</td><td>Hudson Yards · Vessel · Edge Observation Deck · High Line</td><td>Chelsea Market · Dinner in Times Square</td></tr>
+        <tr><td class="day-label">Day 3</td><td>Central Park · Fifth Avenue · Rockefeller Center · St. Patrick's Cathedral</td><td>Grand Central Terminal · Walk the Brooklyn Bridge</td><td>Dinner · Broadway show</td></tr>
+      </tbody>
+    </table>
+    <div class="card-cta">
+      <a href="#cta" class="card-cta-btn">Get a Fully Customised Itinerary →</a>
+    </div>
+  </div>
+
+  <!-- 3-Day #2 -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-name">The Brooklyn Blend</span>
+      <span class="card-badge">3 Days</span>
+    </div>
+    <table class="itinerary-table">
+      <thead><tr><th></th><th>Morning</th><th>Afternoon</th><th>Evening</th></tr></thead>
+      <tbody>
+        <tr><td class="day-label">Day 1</td><td>Arrive in NYC · Check into Brooklyn · Lunch at local café (Marcy and Myrtle)</td><td>High Line · Hudson Yards · Vessel · MoMA</td><td>Rockefeller Center · Barn Joo dinner · Dylan's Candy Bar · Return to Brooklyn</td></tr>
+        <tr><td class="day-label">Day 2</td><td>Dudley's breakfast · Broome Street Bakery stop</td><td>The Met (several hours) · Central Park (Bow Bridge, Bethesda Terrace)</td><td>Nix dinner Greenwich Village · Strand Bookstore · DŌ cookie dough</td></tr>
+        <tr><td class="day-label">Day 3</td><td>Brown Butter Brooklyn breakfast · Relaxed morning</td><td>Pack up · Begin return journey</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div class="card-cta">
+      <a href="#cta" class="card-cta-btn">Get a Fully Customised Itinerary →</a>
+    </div>
+  </div>
+
+  <!-- 3-Day #3 -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-name">Uptown to Downtown</span>
+      <span class="card-badge">3 Days</span>
+    </div>
+    <table class="itinerary-table">
+      <thead><tr><th></th><th>Morning</th><th>Afternoon</th><th>Evening</th></tr></thead>
+      <tbody>
+        <tr><td class="day-label">Day 1</td><td>Central Park · American Museum of Natural History or The Met · Museum Mile</td><td>Walk south along Fifth Avenue · Major landmarks</td><td>Times Square · Dinner in Theater District</td></tr>
+        <tr><td class="day-label">Day 2</td><td>Statue of Liberty &amp; Ellis Island (book in advance)</td><td>Wall Street · Financial District · 9/11 Memorial &amp; Museum · Oculus · One World Observatory</td><td>Brooklyn Bridge walk at sunset · DUMBO · Dinner in Lower East Side</td></tr>
+        <tr><td class="day-label">Day 3</td><td>Chelsea Market breakfast · High Line walk</td><td>Hudson Yards · Vessel · Top of the Rock or Edge · St. Patrick's Cathedral · Grand Central</td><td>Times Square · Broadway show · Optional Empire State Building</td></tr>
+      </tbody>
+    </table>
+    <div class="card-cta">
+      <a href="#cta" class="card-cta-btn">Get a Fully Customised Itinerary →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ 5-DAY SECTION ══ -->
+<div class="section" id="sec-5" role="tabpanel">
+
+  <p class="section-label">5-Day Itineraries</p>
+
+  <!-- 5-Day #1 -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-name">Neighbourhoods &amp; Culture</span>
+      <span class="card-badge">5 Days</span>
+    </div>
+    <table class="itinerary-table">
+      <thead><tr><th></th><th>Morning</th><th>Afternoon</th><th>Evening</th></tr></thead>
+      <tbody>
+        <tr><td class="day-label">Day 1</td><td>The Met · Upper East Side</td><td>Central Park (Reservoir, Bow Bridge, Bethesda Terrace, Literary Walk, Boathouse)</td><td>Midtown · Times Square · Broadway show</td></tr>
+        <tr><td class="day-label">Day 2</td><td>West Village brunch · Washington Square Park</td><td>SoHo · Nolita · Little Italy · Shopping and neighborhood exploration</td><td>High Line walk · Dinner and drinks in Meatpacking District</td></tr>
+        <tr><td class="day-label">Day 3</td><td>Walk Brooklyn Bridge or take the ferry to DUMBO · Cobble Hill</td><td>Prospect Park · Brooklyn Botanic Garden</td><td>Williamsburg · Optional sporting event</td></tr>
+        <tr><td class="day-label">Day 4</td><td>Nolita · Little Italy · Tenement Museum</td><td>Lower East Side · East Village</td><td>Dinner in West Village · Show at Comedy Cellar</td></tr>
+        <tr><td class="day-label">Day 5</td><td>MoMA or Morgan Library</td><td>Grand Central Terminal · Bryant Park · New York Public Library</td><td>Top of the Rock or Empire State Building at sunset · Jazz in West Village</td></tr>
+      </tbody>
+    </table>
+    <div class="card-cta">
+      <a href="#cta" class="card-cta-btn">Get a Fully Customised Itinerary →</a>
+    </div>
+  </div>
+
+  <!-- 5-Day #2 -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-name">Icons &amp; Landmarks</span>
+      <span class="card-badge">5 Days</span>
+    </div>
+    <table class="itinerary-table">
+      <thead><tr><th></th><th>Morning</th><th>Afternoon</th><th>Evening</th></tr></thead>
+      <tbody>
+        <tr><td class="day-label">Day 1</td><td>Wall Street · Charging Bull · Financial District</td><td>Staten Island Ferry · 9/11 Memorial · World Trade Center</td><td>Walk across Brooklyn Bridge · Saturday Night Live or evening entertainment</td></tr>
+        <tr><td class="day-label">Day 2</td><td>Rockefeller Center · Radio City Music Hall · St. Patrick's Cathedral</td><td>Fifth Avenue · Grand Central Terminal · NY Public Library · Bryant Park</td><td>Times Square · Broadway show</td></tr>
+        <tr><td class="day-label">Day 3</td><td>American Museum of Natural History</td><td>Central Park — full exploration</td><td>Metropolitan Museum of Art · Upper East Side</td></tr>
+        <tr><td class="day-label">Day 4</td><td>Statue of Liberty &amp; Ellis Island (book in advance)</td><td>Battery Park · Waterfront areas</td><td>One World Observatory · Lower Manhattan</td></tr>
+        <tr><td class="day-label">Day 5</td><td>Chelsea Market</td><td>High Line · Meatpacking District</td><td>Empire State Building · Final Midtown exploration</td></tr>
+      </tbody>
+    </table>
+    <div class="card-cta">
+      <a href="#cta" class="card-cta-btn">Get a Fully Customised Itinerary →</a>
+    </div>
+  </div>
+
+  <!-- 5-Day #3 -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-name">Every Borough, Every Vibe</span>
+      <span class="card-badge">5 Days</span>
+    </div>
+    <table class="itinerary-table">
+      <thead><tr><th></th><th>Morning</th><th>Afternoon</th><th>Evening</th></tr></thead>
+      <tbody>
+        <tr><td class="day-label">Day 1</td><td>The Met · Upper East Side</td><td>Central Park exploration</td><td>Times Square · Broadway show</td></tr>
+        <tr><td class="day-label">Day 2</td><td>Rockefeller Center · St. Patrick's Cathedral · Fifth Avenue</td><td>Grand Central · Bryant Park · NY Public Library</td><td>Observation deck · Midtown nightlife</td></tr>
+        <tr><td class="day-label">Day 3</td><td>Chelsea Market · Whitney Museum</td><td>Little Island · Pier 57 · High Line · Hudson Yards</td><td>Dinner · Speakeasy experience</td></tr>
+        <tr><td class="day-label">Day 4</td><td>Statue of Liberty &amp; Ellis Island (book in advance)</td><td>Financial District · Wall Street · 9/11 Memorial · Oculus</td><td>One World Observatory · Downtown dining</td></tr>
+        <tr><td class="day-label">Day 5</td><td>Brooklyn Bridge walk · DUMBO</td><td>Brooklyn Heights · Prospect Park or Williamsburg</td><td>Brooklyn waterfront views · Dinner</td></tr>
+      </tbody>
+    </table>
+    <div class="card-cta">
+      <a href="#cta" class="card-cta-btn">Get a Fully Customised Itinerary →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ 7-DAY SECTION ══ -->
+<div class="section" id="sec-7" role="tabpanel">
+
+  <p class="section-label">7-Day Itineraries</p>
+
+  <!-- 7-Day #1 -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-name">The Full New York Experience</span>
+      <span class="card-badge">7 Days</span>
+    </div>
+    <table class="itinerary-table">
+      <thead><tr><th></th><th>Morning</th><th>Afternoon</th><th>Evening</th></tr></thead>
+      <tbody>
+        <tr><td class="day-label">Day 1</td><td>Times Square · Bryant Park</td><td>Rockefeller Center · Fifth Avenue</td><td>Broadway show · Times Square at night</td></tr>
+        <tr><td class="day-label">Day 2</td><td>Central Park highlights</td><td>AMNH or The Met</td><td>Upper West Side dining</td></tr>
+        <tr><td class="day-label">Day 3</td><td>Chelsea Market</td><td>High Line · Hudson Yards · Vessel</td><td>Edge observation deck or rooftop views</td></tr>
+        <tr><td class="day-label">Day 4</td><td>Trinity Church · Wall Street · NYSE · Fearless Girl · Charging Bull</td><td>9/11 Memorial · Oculus · Financial District</td><td>One World Observatory</td></tr>
+        <tr><td class="day-label">Day 5</td><td>Brooklyn Bridge walk</td><td>DUMBO · Brooklyn waterfront</td><td>Brooklyn nightlife or waterfront dinner</td></tr>
+        <tr><td class="day-label">Day 6</td><td>Washington Square Park</td><td>SoHo · Village exploration</td><td>Food crawl · Nightlife</td></tr>
+        <tr><td class="day-label">Day 7</td><td>TV &amp; movie locations · Missed neighborhoods</td><td>Optional Coney Island · Museums · Shopping</td><td>Final observation deck or farewell dinner</td></tr>
+      </tbody>
+    </table>
+    <div class="card-cta">
+      <a href="#cta" class="card-cta-btn">Get a Fully Customised Itinerary →</a>
+    </div>
+  </div>
+
+  <!-- 7-Day #2 -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-name">New York in Depth</span>
+      <span class="card-badge">7 Days</span>
+    </div>
+    <table class="itinerary-table">
+      <thead><tr><th></th><th>Morning</th><th>Afternoon</th><th>Evening</th></tr></thead>
+      <tbody>
+        <tr><td class="day-label">Day 0</td><td>Arrive in NYC · Check into accommodation</td><td>Recover from travel</td><td>Light walk · Dinner nearby</td></tr>
+        <tr><td class="day-label">Day 1</td><td>Times Square · Rockefeller Center</td><td>St. Patrick's Cathedral · NY Public Library · Bryant Park · Grand Central · Chrysler Building</td><td>Broadway show · Koreatown</td></tr>
+        <tr><td class="day-label">Day 2</td><td>The Plaza Hotel · Central Park</td><td>The Met Museum</td><td>Upper East Side stroll</td></tr>
+        <tr><td class="day-label">Day 3</td><td>Roosevelt Island · Tudor City Bridge</td><td>SoHo · Little Italy · Chinatown</td><td>SUMMIT One Vanderbilt · DUMBO · Manhattan Bridge · Brooklyn Bridge at sunset</td></tr>
+        <tr><td class="day-label">Day 4</td><td>Madison Square Park</td><td>Empire State Building · Flatiron Building</td><td>Friends Experience · Levain Bakery · Nubeluz Rooftop Bar</td></tr>
+        <tr><td class="day-label">Day 5</td><td>MoMA</td><td>One World Trade Center · 9/11 Memorial</td><td>Financial District · Wall Street · Charging Bull · Trinity Church · Ghostbusters Firehouse</td></tr>
+        <tr><td class="day-label">Day 6</td><td>Statue of Liberty &amp; Liberty Island (book in advance)</td><td>Ferry &amp; harbor exploration</td><td>New Year's Eve celebrations or Brooklyn Bridge evening</td></tr>
+        <tr><td class="day-label">Day 7</td><td>Vessel · Hudson Yards</td><td>Pier 57 · High Line</td><td>Broadway musical · Farewell dinner</td></tr>
+      </tbody>
+    </table>
+    <div class="card-cta">
+      <a href="#cta" class="card-cta-btn">Get a Fully Customised Itinerary →</a>
+    </div>
+  </div>
+
+  <!-- 7-Day #3 -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-name">Seven Days, Seven Moods</span>
+      <span class="card-badge">7 Days</span>
+    </div>
+    <table class="itinerary-table">
+      <thead><tr><th></th><th>Morning</th><th>Afternoon</th><th>Evening</th></tr></thead>
+      <tbody>
+        <tr><td class="day-label">Day 1</td><td>Bryant Park · NY Public Library · Grand Central Terminal</td><td>Chrysler Building · SUMMIT One Vanderbilt</td><td>Times Square · Broadway show</td></tr>
+        <tr><td class="day-label">Day 2</td><td>Central Park exploration</td><td>The Met</td><td>Upper East Side dining and stroll</td></tr>
+        <tr><td class="day-label">Day 3</td><td>Wall Street · Charging Bull · Trinity Church</td><td>9/11 Memorial · Oculus · One World Observatory</td><td>Staten Island Ferry for Statue of Liberty views</td></tr>
+        <tr><td class="day-label">Day 4</td><td>Walk Brooklyn Bridge</td><td>DUMBO · Brooklyn Heights</td><td>Brooklyn waterfront sunset</td></tr>
+        <tr><td class="day-label">Day 5</td><td>Chelsea Market</td><td>High Line · Little Island</td><td>Hudson Yards · Edge</td></tr>
+        <tr><td class="day-label">Day 6</td><td>Washington Square Park</td><td>SoHo shopping and exploration</td><td>West Village dining · Nightlife</td></tr>
+        <tr><td class="day-label">Day 7</td><td>MoMA or AMNH</td><td>Fifth Avenue · Rockefeller Center</td><td>Final observation deck or Broadway</td></tr>
+      </tbody>
+    </table>
+    <div class="card-cta">
+      <a href="#cta" class="card-cta-btn">Get a Fully Customised Itinerary →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ BOTTOM CTA SECTION ══ -->
+<div class="cta-section" id="cta">
+  <p class="cta-kicker">Custom NYC Planning</p>
+  <h2 class="cta-head">Ready for an Itinerary Built Around Your Trip?</h2>
+  <p class="cta-body">You've explored a variety of New York itineraries from different travelers and bloggers. While these can be great sources of inspiration, the perfect itinerary isn't someone else's trip — it's one designed around your travel dates, interests, budget, accommodation, and travel style. That's where we can help.</p>
+
+  <div class="features">
+    <div class="feat">
+      <div class="feat-check">&#10003;</div>
+      <div class="feat-title">Fully Customised Itinerary</div>
+      <div class="feat-body">Built around your travel dates, arrival and departure times, accommodation location, interests, budget, and travel preferences.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-check">&#10003;</div>
+      <div class="feat-title">Delivered Within 24–36 Hours</div>
+      <div class="feat-body">Receive your personalised itinerary within 24–36 hours after completing our short trip planning questionnaire.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-check">&#10003;</div>
+      <div class="feat-title">Unlimited Revisions Until Your Trip</div>
+      <div class="feat-body">Plans changed? Want to add attractions? We'll revise your itinerary as many times as needed before your trip.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-check">&#10003;</div>
+      <div class="feat-title">Personalised Recommendations</div>
+      <div class="feat-body">Tailored picks across restaurants, cafés, observation decks, hidden gems, neighborhoods, shopping areas, and local experiences.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-check">&#10003;</div>
+      <div class="feat-title">Optimised Daily Routes</div>
+      <div class="feat-body">Each day is organised logically to minimise unnecessary travel and help you experience more of the city.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-check">&#10003;</div>
+      <div class="feat-title">Why Travelers Choose Us</div>
+      <div class="feat-body">Instead of relying on generic online itineraries, you get a plan designed specifically for how you want to experience New York City.</div>
+    </div>
+  </div>
+
+  <div class="price-block">
+    <div class="price-num">$20</div>
+    <div class="price-text">
+      <strong>One-time fee. No subscriptions.</strong>
+      The lowest itinerary planning price on the internet. Whether you're visiting for 3, 5, 7 days or longer — we'll help you make the most of every day. Delivered within 24–36 hours. Unlimited revisions included.
+    </div>
+  </div>
+
+  <div class="reviews-title">What travelers are saying</div>
+  <div class="reviews-grid">
+
+    <div class="review-card">
+      <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="review-text">"We had 4 days in NYC with two kids (ages 7 and 10) and no idea where to start. The itinerary we got was incredibly specific — it even noted that the Staten Island Ferry is free and the best spot to stand for Statue of Liberty photos. Every morning I just opened the PDF and knew exactly where we were headed. Saved us hours of Googling."</div>
+      <div class="review-author">
+        <div class="review-avatar">SR</div>
+        <div>
+          <div class="review-name">Sarah R.</div>
+          <div class="review-meta">Traveled from Manchester, UK &nbsp;·&nbsp; Family of 4 &nbsp;·&nbsp; April 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="review-text">"I was skeptical about paying for an itinerary when there's so much free stuff online — but the free stuff is all the same generic lists. This felt like getting advice from a friend who actually lives there. They routed our Day 2 through the West Village for morning coffee before the High Line, which we never would've thought of. The neighborhood flow made every day feel effortless."</div>
+      <div class="review-author">
+        <div class="review-avatar">JM</div>
+        <div>
+          <div class="review-name">James M.</div>
+          <div class="review-meta">Traveled from Toronto, Canada &nbsp;·&nbsp; Couple &nbsp;·&nbsp; October 2024</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="review-text">"I asked for a revision because we decided to skip the Statue of Liberty and add more time in Brooklyn. Got the updated plan back within a few hours, no fuss at all. The final itinerary had us doing DUMBO in the morning before the crowds arrived — genuinely the best tip of the whole trip. For $20 this is a complete no-brainer."</div>
+      <div class="review-author">
+        <div class="review-avatar">PK</div>
+        <div>
+          <div class="review-name">Priya K.</div>
+          <div class="review-meta">Traveled from Bangalore, India &nbsp;·&nbsp; Solo traveler &nbsp;·&nbsp; February 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="review-text">"My husband and I had 7 days and wanted a mix of the big landmarks and some local neighborhoods — not just Times Square and Central Park. The itinerary gave us a full day in Astoria and another in the Lower East Side with specific restaurant suggestions. Ended up eating at Russ &amp; Daughters and Xi'an Famous Foods on the same afternoon. Perfect."</div>
+      <div class="review-author">
+        <div class="review-avatar">LC</div>
+        <div>
+          <div class="review-name">Laura C.</div>
+          <div class="review-meta">Traveled from Sydney, Australia &nbsp;·&nbsp; Couple &nbsp;·&nbsp; January 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="review-text">"I mentioned in the questionnaire that I'm vegetarian and really into street art. The plan came back with a Bushwick Collective morning, a stop at by CHLOE for lunch, and the Whitney Museum in the afternoon. None of that would've appeared on any standard NYC list. That level of personalisation is what you're paying for."</div>
+      <div class="review-author">
+        <div class="review-avatar">DT</div>
+        <div>
+          <div class="review-name">Daniel T.</div>
+          <div class="review-meta">Traveled from Berlin, Germany &nbsp;·&nbsp; Solo traveler &nbsp;·&nbsp; March 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <div class="review-text">"We were a group of five friends doing a bachelorette trip and needed something that balanced sightseeing with nightlife. The itinerary nailed it — Brooklyn Bridge in the morning, rooftop bar in the evening, comedy show one night, jazz club another. It even flagged that we needed to book Comedy Cellar tickets in advance. Super thoughtful."</div>
+      <div class="review-author">
+        <div class="review-avatar">AN</div>
+        <div>
+          <div class="review-name">Aisha N.</div>
+          <div class="review-meta">Traveled from Dubai, UAE &nbsp;·&nbsp; Group of 5 &nbsp;·&nbsp; May 2025</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <a href="https://payhip.com/b/8keAb" class="main-cta">Get My Custom NYC Itinerary →</a>
+  <p class="sub-note">Delivered within 24–36 hours &nbsp;·&nbsp; Unlimited revisions &nbsp;·&nbsp; Only $20</p>
+</div>
+
+<div class="footer">
+  &copy; 2025 New York Day by Day &nbsp;·&nbsp; Custom NYC Itinerary Planning
+</div>
+
+<script>
+  function switchTab(btn, sectionId) {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+    document.getElementById(sectionId).classList.add('visible');
+    const nav = document.querySelector('.sticky-nav');
+    const navBottom = nav.getBoundingClientRect().bottom + window.scrollY;
+    window.scrollTo({ top: navBottom - 10, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>

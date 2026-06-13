@@ -484,24 +484,7 @@
   }
 
 
-    display: block;
-    width: 100%;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    padding: 1.2rem;
-    font-size: 18px;
-    font-weight: 900;
-    font-family: 'Nunito Sans', sans-serif;
-    cursor: pointer;
-    text-align: center;
-    letter-spacing: .03em;
-    text-decoration: none;
-    max-width: 560px;
-  }
-
-   .main-cta {
+  .main-cta {
     display: block;
     width: 100%;
     max-width: 560px;
@@ -521,7 +504,12 @@
     transition: background .15s, box-shadow .15s;
   }
 
-  .main-cta:hover { background: #BC4424; }
+  .main-cta:hover {
+    background: #BC4424;
+    color: #fff !important;
+    text-decoration: none !important;
+    box-shadow: 0 6px 24px rgba(212,80,42,0.48);
+  }
 
   .sub-note {
     font-size: 12px;
